@@ -10,7 +10,7 @@ import UIKit
 
 class TableViewController: UITableViewController, SectionsAsDataSource {
     
-    typealias V = UITableView
+    typealias CollectionTypeView = UITableView
 
     var sections: [Section<SectionInfo, CellInfo>] = []
     
