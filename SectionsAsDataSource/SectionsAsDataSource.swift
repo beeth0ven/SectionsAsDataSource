@@ -14,6 +14,7 @@ protocol SectionsAsDataSource: class {
     typealias CellInfo: ReusableCell
     typealias CollectionTypeView: CollectionTypeViewTrait // UITableView or UICollectionView
     
+    var collectionTypeView: CollectionTypeView! { get }
     var sections: [Section<SectionInfo, CellInfo>] { get set }  // Provide Data Source to CollectionTypeView
     var sectionStruct: [(section: SectionInfo, cells: [CellInfo])] { get }  // Minimal Struct For CollectionTypeView
     func configCell(cell: CollectionTypeView.Cell, withCellInfo cellInfo: CellInfo) // Map CellInfo to CollectionTypeView.Cell
@@ -23,6 +24,7 @@ extension SectionsAsDataSource {
     // Map sectionStruct to sections
     func setupSections() {
         sections = sectionStruct.map { Section(sectionInfo: $0.section, cellInfos: $0.cells) }
+        collectionTypeView.reloadData()
     }
     
     // Provide Data Source to CollectionTypeView
@@ -34,9 +36,9 @@ extension SectionsAsDataSource {
         return sections[section].cellInfos.count
     }
     
-    func collectionTypeView(view: CollectionTypeView, cellForRowAtIndexPath indexPath: NSIndexPath) -> CollectionTypeView.Cell {
+    func collectionTypeView(collectionTypeView: CollectionTypeView, cellForRowAtIndexPath indexPath: NSIndexPath) -> CollectionTypeView.Cell {
         let cellInfo = cellInfoAtIndexPath(indexPath)
-        let cell = view.dequeueReusableCellWithIdentifier(cellInfo.cellReuseIdentifer, forIndexPath: indexPath)
+        let cell = collectionTypeView.dequeueReusableCellWithIdentifier(cellInfo.cellReuseIdentifer, forIndexPath: indexPath)
         configCell(cell, withCellInfo: cellInfo)
         return cell
     }
@@ -45,6 +47,17 @@ extension SectionsAsDataSource {
     func cellInfoAtIndexPath(indexPath: NSIndexPath) -> CellInfo {
         return sections[indexPath.section].cellInfos[indexPath.item]
     }
+}
+
+// Extension UITableViewController or UICollectionViewController to support SectionsAsDataSource‘s some areas.
+extension UITableViewController {
+    typealias CollectionTypeView = UITableView
+    var collectionTypeView: UITableView! { return tableView }
+}
+
+extension UICollectionViewController {
+    typealias CollectionTypeView = UICollectionView
+    var collectionTypeView: UICollectionView! { return collectionView }
 }
 
 // For Cell Info
@@ -58,10 +71,11 @@ struct Section<SectionInfo, CellInfo> {
     var cellInfos:  [CellInfo]
 }
 
-/// treat Table View Or Collection View as One Type View
+/// Treat Table View Or Collection View as One Type
 protocol CollectionTypeViewTrait {
     typealias Cell
     func dequeueReusableCellWithIdentifier(identifier: String, forIndexPath indexPath: NSIndexPath) -> Cell
+    func reloadData()
 }
 
 extension UITableView: CollectionTypeViewTrait {}

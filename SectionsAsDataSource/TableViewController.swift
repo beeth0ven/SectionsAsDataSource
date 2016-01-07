@@ -10,8 +10,6 @@ import UIKit
 
 class TableViewController: UITableViewController, SectionsAsDataSource {
     
-    typealias CollectionTypeView = UITableView
-
     var sections: [Section<SectionInfo, CellInfo>] = []
     
     var sectionStruct: [(section: SectionInfo, cells: [CellInfo])] {
@@ -87,4 +85,5 @@ extension TableViewController {
         return sections[section].sectionInfo.rawValue
     }
 }
+
 
