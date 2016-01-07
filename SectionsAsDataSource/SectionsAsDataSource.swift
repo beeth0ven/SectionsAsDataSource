@@ -9,6 +9,8 @@
 import UIKit
 
 /// Provide Data Source to CollectionTypeView
+//  Demo URL: https://github.com/beeth0ven/SectionsAsDataSource
+
 protocol SectionsAsDataSource: class {
     typealias SectionInfo
     typealias CellInfo: ReusableCell
@@ -45,7 +47,7 @@ extension SectionsAsDataSource {
     
     // Helper
     func cellInfoAtIndexPath(indexPath: NSIndexPath) -> CellInfo {
-        return sections[indexPath.section].cellInfos[indexPath.item]
+        return sections[indexPath.section][indexPath.item]
     }
 }
 
@@ -69,6 +71,11 @@ protocol ReusableCell {
 struct Section<SectionInfo, CellInfo> {
     var sectionInfo: SectionInfo
     var cellInfos:  [CellInfo]
+    
+    subscript(index: Int) -> CellInfo {
+        get { return cellInfos[index] }
+        set { cellInfos[index] = newValue }
+    }
 }
 
 /// Treat Table View Or Collection View as One Type
