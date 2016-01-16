@@ -12,27 +12,27 @@ class TableViewController: UITableViewController, SectionsAsDataSource {
     
     var sections: [Section<SectionInfo, CellInfo>] = []
     
-    var sectionStruct: [(section: SectionInfo, cells: [CellInfo])] {
-        return [
-            (.OverView, [
-                .Name,
-                .Detail,
-                .Time
-                ]
-            ),
-            (.Author, [
-                .AuthorName,
-                .AuthorImage,
-                .AuthorAge
-                ]
-            ),
-            (.Footer, [
-                .LikeNumber,
-                .FollowNumer,
-                ]
-            )
-        ]
-    }
+    var sectionStruct: [(section: SectionInfo, cells: [CellInfo])] =
+    [
+        (.OverView, [
+            .Name,
+            .Detail,
+            .Time
+            ]
+        ),
+        (.Author, [
+            .AuthorName,
+            .AuthorImage,
+            .AuthorAge
+            ]
+        ),
+        (.Footer, [
+            .LikeNumber,
+            .FollowNumer,
+            ]
+        )
+    ]
+    
     
     enum SectionInfo: String {
         case OverView

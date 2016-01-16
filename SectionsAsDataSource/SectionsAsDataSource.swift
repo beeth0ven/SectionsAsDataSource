@@ -18,7 +18,7 @@ protocol SectionsAsDataSource: class {
     
     var collectionTypeView: CollectionTypeView! { get }
     var sections: [Section<SectionInfo, CellInfo>] { get set }  // Provide Data Source to CollectionTypeView
-    var sectionStruct: [(section: SectionInfo, cells: [CellInfo])] { get }  // Minimal Struct For CollectionTypeView
+    var sectionStruct: [(section: SectionInfo, cells: [CellInfo])] { get set }  // Minimal Struct For CollectionTypeView
     func configCell(cell: CollectionTypeView.Cell, withCellInfo cellInfo: CellInfo) // Map CellInfo to CollectionTypeView.Cell
 }
 

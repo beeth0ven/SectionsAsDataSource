@@ -13,6 +13,7 @@
 		451051C51C39F9C300404CFF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 451051C31C39F9C300404CFF /* LaunchScreen.storyboard */; };
 		451051CF1C39F9EB00404CFF /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451051CD1C39F9EB00404CFF /* TableViewController.swift */; };
 		451051D01C39F9EB00404CFF /* SectionsAsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451051CE1C39F9EB00404CFF /* SectionsAsDataSource.swift */; };
+		45A9858C1C4A4695007DA0CF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A9858B1C4A4695007DA0CF /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		451051C61C39F9C300404CFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		451051CD1C39F9EB00404CFF /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		451051CE1C39F9EB00404CFF /* SectionsAsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionsAsDataSource.swift; sourceTree = "<group>"; };
+		45A9858B1C4A4695007DA0CF /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				451051CD1C39F9EB00404CFF /* TableViewController.swift */,
 				451051CE1C39F9EB00404CFF /* SectionsAsDataSource.swift */,
 				451051BE1C39F9C300404CFF /* Main.storyboard */,
+				45A9858B1C4A4695007DA0CF /* ViewController.swift */,
 				451051CC1C39F9E100404CFF /* Supporting Files */,
 			);
 			path = SectionsAsDataSource;
@@ -148,6 +151,7 @@
 			files = (
 				451051BB1C39F9C300404CFF /* AppDelegate.swift in Sources */,
 				451051D01C39F9EB00404CFF /* SectionsAsDataSource.swift in Sources */,
+				45A9858C1C4A4695007DA0CF /* ViewController.swift in Sources */,
 				451051CF1C39F9EB00404CFF /* TableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,6 +302,7 @@
 				451051CB1C39F9C300404CFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
