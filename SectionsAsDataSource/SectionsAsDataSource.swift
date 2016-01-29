@@ -67,16 +67,7 @@ protocol ReusableCell {
     var cellReuseIdentifer: String { get }
 }
 
-// Provide Struct For Each Section
-struct Section<SectionInfo, CellInfo> {
-    var sectionInfo: SectionInfo
-    var cellInfos:  [CellInfo]
-    
-    subscript(index: Int) -> CellInfo {
-        get { return cellInfos[index] }
-        set { cellInfos[index] = newValue }
-    }
-}
+
 
 /// Treat Table View Or Collection View as One Type
 protocol CollectionTypeViewTrait {
