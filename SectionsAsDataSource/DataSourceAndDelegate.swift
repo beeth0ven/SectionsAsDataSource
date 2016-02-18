@@ -96,7 +96,8 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     var viewForHeaderForSectionInfo:    ((SectionInfo) -> UIView?)?
     var scrollViewDidScroll:            ((UIScrollView) -> Void)?
     var scrollViewDidEndDecelerating:   ((UIScrollView) -> Void)?
-    
+    var modelForCellInfo:               ((CellInfo) -> Any?)?
+
     
     // MARK: UITableViewDataSource
     
@@ -111,8 +112,17 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellInfo = cellInfoAtIndexPath(indexPath)
         let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifierForCellInfo(cellInfo))!
+        configureCell(cell, withCellInfoModel: modelForCellInfo?(cellInfo))
         configureCellForCellInfo?(cell, cellInfo)
         return cell
+    }
+    
+    private func configureCell(cell: UITableViewCell, withCellInfoModel model: Any?) {
+        guard
+        let modelCell = cell as? ModelTableViewCell,
+            model = model else { return }
+        
+        modelCell.model = model
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
