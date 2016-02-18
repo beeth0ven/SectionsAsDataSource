@@ -95,6 +95,7 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     var didSelectCellInfo:              ((CellInfo) -> Void)?
     var viewForHeaderForSectionInfo:    ((SectionInfo) -> UIView?)?
     var scrollViewDidScroll:            ((UIScrollView) -> Void)?
+    var scrollViewDidEndDecelerating:   ((UIScrollView) -> Void)?
     
     
     // MARK: UITableViewDataSource
@@ -133,6 +134,10 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         scrollViewDidScroll?(scrollView)
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        scrollViewDidEndDecelerating?(scrollView)
     }
     
     // Helper
