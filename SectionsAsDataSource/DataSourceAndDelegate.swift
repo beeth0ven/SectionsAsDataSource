@@ -85,9 +85,11 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     
     // MARK: Properties
     
-    var sections: [Section<SectionInfo, CellInfo>] = [] { didSet { tableView.reloadData() } }
+    var sections: [Section<SectionInfo, CellInfo>] = [] { didSet { updateUI() } }
     
     weak var tableView: UITableView! { didSet { tableView.dataSource = self; tableView.delegate = self } }
+    weak var noContentFooterView: UIView?
+    
     
     var reuseIdentifierForCellInfo:     ((CellInfo) -> String)!
     var configureCellForCellInfo:       ((UITableViewCell, CellInfo) -> Void)?
@@ -97,7 +99,7 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     var scrollViewDidScroll:            ((UIScrollView) -> Void)?
     var scrollViewDidEndDecelerating:   ((UIScrollView) -> Void)?
     var modelForCellInfo:               ((CellInfo) -> Any?)?
-
+    
     
     // MARK: UITableViewDataSource
     
@@ -119,7 +121,7 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     
     private func configureCell(cell: UITableViewCell, withCellInfoModel model: Any?) {
         guard
-        let modelCell = cell as? ModelTableViewCell,
+            let modelCell = cell as? ModelTableViewCell,
             model = model else { return }
         
         modelCell.model = model
@@ -148,6 +150,16 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         scrollViewDidEndDecelerating?(scrollView)
+    }
+    
+    // MARK: UITableViewDataSource
+    private func updateUI() {
+        tableView.reloadData()
+        tableView.tableFooterView = allCellInfosCount > 0 ? nil : noContentFooterView
+    }
+    
+    private var allCellInfosCount: Int {
+        return sections.reduce(0, combine: { $0 + $1.cellInfos.count } )
     }
     
     // Helper
