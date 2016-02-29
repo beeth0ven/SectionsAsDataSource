@@ -8,12 +8,14 @@
 
 import UIKit
 
+// MARK: - Public
+
 /**
  Turn UITableView delegate based API to block based API, Usage:
  ```swift
 class ViewController: UIViewController {
  
-    var dataSourceAndDelegate = DataSourceAndDelegate<SectionInfo, CellInfo>()
+    var dataSourceAndDelegate = DataSourceAndDelegate<SectionStyle, CellStyle>()
 
     @IBOutlet weak var tableView: UITableView! {
         didSet {
@@ -29,42 +31,42 @@ class ViewController: UIViewController {
     
     func setupDataSourceAndDelegate() {
         
-        dataSourceAndDelegate.reuseIdentifierForCellInfo = {
-            cellInfo in
+        dataSourceAndDelegate.reuseIdentifierForCellStyle = {
+            cellStyle in
             return "cell"
         }
         
-        dataSourceAndDelegate.configureCellForCellInfo = {
-            cell, cellInfo in
-            cell.textLabel?.text = cellInfo.rawValue
+        dataSourceAndDelegate.configureCellForCellStyle = {
+            cell, cellStyle in
+            cell.textLabel?.text = cellStyle.rawValue
         }
         
-        dataSourceAndDelegate.titleForSectionInfo = {
-            sectionInfo in
-            return sectionInfo.rawValue
+        dataSourceAndDelegate.titleForSectionStyle = {
+            sectionStyle in
+            return sectionStyle.rawValue
         }
         
-        dataSourceAndDelegate.didSelectCellInfo = {
-            cellInfo in
-            print("did Select: \(cellInfo.rawValue)")
+        dataSourceAndDelegate.didSelectCellStyle = {
+            cellStyle in
+            print("did Select: \(cellStyle.rawValue)")
         }
     }
     
     func refreshData() {
         dataSourceAndDelegate.sections = [
-            Section(sectionInfo: .OverView, cellInfos: [.Name, .Detail, .Time]),
-            Section(sectionInfo: .Author,   cellInfos: [.AuthorName, .AuthorImage, .AuthorAge]),
-            Section(sectionInfo: .Footer,   cellInfos: [.LikeNumber, .FollowNumer, .Time]),
+            Section(sectionStyle: .OverView, cellStyles: [.Name, .Detail, .Time]),
+            Section(sectionStyle: .Author,   cellStyles: [.AuthorName, .AuthorImage, .AuthorAge]),
+            Section(sectionStyle: .Footer,   cellStyles: [.LikeNumber, .FollowNumer, .Time]),
         ]
     }
     
-    enum SectionInfo: String {
+    enum SectionStyle: String {
         case OverView
         case Author
         case Footer
     }
     
-    enum CellInfo: String {
+    enum CellStyle: String {
         case Name
         case Detail
         case Time
@@ -81,24 +83,35 @@ class ViewController: UIViewController {
  ```
  */
 
-class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSource, UITableViewDelegate {
+
+class DataSourceAndDelegate<SectionStyle, CellStyle>: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: Properties
     
-    var sections: [Section<SectionInfo, CellInfo>] = [] { didSet { updateUI() } }
+    var sections: [Section<SectionStyle, CellStyle>] = [] { didSet { updateUI() } }
     
+
     weak var tableView: UITableView! { didSet { tableView.dataSource = self; tableView.delegate = self } }
+    weak var tableFooterView: UIView?
     weak var noContentFooterView: UIView?
+
+    // Configure Cell
+    var reuseIdentifierForCellStyle:     ((CellStyle) -> String)!
+    var configureCellForCellStyle:       ((UITableViewCell, CellStyle) -> Void)?
+    var titleForSectionStyle:            ((SectionStyle) -> String?)?
+    var modelForCellStyle:               ((CellStyle) -> Any?)?
     
-    
-    var reuseIdentifierForCellInfo:     ((CellInfo) -> String)!
-    var configureCellForCellInfo:       ((UITableViewCell, CellInfo) -> Void)?
-    var titleForSectionInfo:            ((SectionInfo) -> String?)?
-    var didSelectCellInfo:              ((CellInfo) -> Void)?
-    var viewForHeaderForSectionInfo:    ((SectionInfo) -> UIView?)?
+    // Configure Section
+    var reuseIdentifierForSectionStyle:  ((SectionStyle) -> String)!
+    var configureCellForSectionStyle:    ((UITableViewCell, SectionStyle) -> Void)?
+    var modelForSectionStyle:            ((SectionStyle) -> Any?)?
+    var viewForHeaderForSectionStyle:    ((SectionStyle) -> UIView?)?
+
+    // Delegate
+    var didSelectCellStyle:              ((CellStyle) -> Void)?
     var scrollViewDidScroll:            ((UIScrollView) -> Void)?
     var scrollViewDidEndDecelerating:   ((UIScrollView) -> Void)?
-    var modelForCellInfo:               ((CellInfo) -> Any?)?
+    
     
     
     // MARK: UITableViewDataSource
@@ -108,18 +121,18 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].cellInfos.count
+        return sections[section].cellStyles.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cellInfo = cellInfoAtIndexPath(indexPath)
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifierForCellInfo(cellInfo))!
-        configureCell(cell, withCellInfoModel: modelForCellInfo?(cellInfo))
-        configureCellForCellInfo?(cell, cellInfo)
+        let cellStyle = cellStyleAtIndexPath(indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifierForCellStyle(cellStyle))!
+        configureCell(cell, withModel: modelForCellStyle?(cellStyle))
+        configureCellForCellStyle?(cell, cellStyle)
         return cell
     }
     
-    private func configureCell(cell: UITableViewCell, withCellInfoModel model: Any?) {
+    private func configureCell(cell: UITableViewCell, withModel model: Any?) {
         guard
             let modelCell = cell as? ModelTableViewCell,
             model = model else { return }
@@ -128,20 +141,38 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return titleForSectionInfo?(sections[section].sectionInfo)
+        return titleForSectionStyle?(sections[section].sectionStyle)
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return viewForHeaderForSectionInfo?(sections[section].sectionInfo)
+        
+        let sectionStyle = sections[section].sectionStyle
+        
+        if let view = viewForHeaderForSectionStyle?(sectionStyle) {
+            return view
+        }
+        
+        
+        if let identifier = reuseIdentifierForSectionStyle?(sectionStyle),
+            cell = tableView.dequeueReusableCellWithIdentifier(identifier) {
+                
+                configureCell(cell, withModel: modelForSectionStyle?(sectionStyle))
+                configureCellForSectionStyle?(cell, sectionStyle)
+                let view = UIView()
+                view.addSubview(cell)
+                return cell
+                
+        }
+        
+        return nil
     }
     
     
     // MARK: UITableViewDelegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        let cellInfo = cellInfoAtIndexPath(indexPath)
-        didSelectCellInfo?(cellInfo)
+        let cellStyle = cellStyleAtIndexPath(indexPath)
+        didSelectCellStyle?(cellStyle)
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -155,26 +186,39 @@ class DataSourceAndDelegate<SectionInfo, CellInfo>: NSObject, UITableViewDataSou
     // MARK: UITableViewDataSource
     private func updateUI() {
         tableView.reloadData()
-        tableView.tableFooterView = allCellInfosCount > 0 ? nil : noContentFooterView
+        
+        tableView.tableFooterView = tableFooterView
+        
+        if let noContentFooterView = noContentFooterView
+            where  allCellStylesCount == 0 {
+                
+                tableView.tableFooterView = noContentFooterView
+        }
     }
     
-    private var allCellInfosCount: Int {
-        return sections.reduce(0, combine: { $0 + $1.cellInfos.count } )
+    private var allCellStylesCount: Int {
+        return sections.reduce(0, combine: { $0 + $1.cellStyles.count } )
     }
     
     // Helper
-    func cellInfoAtIndexPath(indexPath: NSIndexPath) -> CellInfo {
-        return sections[indexPath.section].cellInfos[indexPath.item]
+    func cellStyleAtIndexPath(indexPath: NSIndexPath) -> CellStyle {
+        return sections[indexPath.section].cellStyles[indexPath.item]
     }
 }
 
 // Provide Struct For Each Section
-struct Section<SectionInfo, CellInfo> {
-    var sectionInfo: SectionInfo
-    var cellInfos:  [CellInfo]
+struct Section<SectionStyle, CellStyle> {
+    var sectionStyle: SectionStyle
+    var cellStyles:  [CellStyle]
     
-    subscript(index: Int) -> CellInfo {
-        get { return cellInfos[index] }
-        set { cellInfos[index] = newValue }
+    subscript(index: Int) -> CellStyle {
+        get { return cellStyles[index] }
+        set { cellStyles[index] = newValue }
     }
+}
+
+
+/// 默认的 SectionStyle , 通常在只有一种 Section 时使用
+enum SectionStyle {
+    case Default   //目录
 }
