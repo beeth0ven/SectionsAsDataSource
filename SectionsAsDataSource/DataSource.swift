@@ -1,5 +1,5 @@
 //
-//  DataSourceAndDelegate.swift
+//  DataSource.swift
 //  SectionsAsDataSource
 //
 //  Created by luojie on 16/1/29.
@@ -15,45 +15,45 @@ import UIKit
  ```swift
 class ViewController: UIViewController {
  
-    var dataSourceAndDelegate = DataSourceAndDelegate<SectionStyle, CellStyle>()
+    var dataSource = DataSource<SectionStyle, CellStyle>()
 
     @IBOutlet weak var tableView: UITableView! {
         didSet {
-            dataSourceAndDelegate.tableView = tableView
+            dataSource.tableView = tableView
         }
     }
  
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupDataSourceAndDelegate()
+        setupDataSource()
         refreshData()
     }
     
-    func setupDataSourceAndDelegate() {
+    func setupDataSource() {
         
-        dataSourceAndDelegate.reuseIdentifierForCellStyle = {
+        dataSource.reuseIdentifierForCellStyle = {
             cellStyle in
             return "cell"
         }
         
-        dataSourceAndDelegate.configureCellForCellStyle = {
+        dataSource.configureCellForCellStyle = {
             cell, cellStyle in
             cell.textLabel?.text = cellStyle.rawValue
         }
         
-        dataSourceAndDelegate.titleForSectionStyle = {
+        dataSource.titleForSectionStyle = {
             sectionStyle in
             return sectionStyle.rawValue
         }
         
-        dataSourceAndDelegate.didSelectCellStyle = {
+        dataSource.didSelectCellStyle = {
             cellStyle in
             print("did Select: \(cellStyle.rawValue)")
         }
     }
     
     func refreshData() {
-        dataSourceAndDelegate.sections = [
+        dataSource.sections = [
             Section(sectionStyle: .OverView, cellStyles: [.Name, .Detail, .Time]),
             Section(sectionStyle: .Author,   cellStyles: [.AuthorName, .AuthorImage, .AuthorAge]),
             Section(sectionStyle: .Footer,   cellStyles: [.LikeNumber, .FollowNumer, .Time]),
@@ -84,7 +84,7 @@ class ViewController: UIViewController {
  */
 
 
-class DataSourceAndDelegate<SectionStyle, CellStyle>: NSObject, UITableViewDataSource, UITableViewDelegate {
+class DataSource<SectionStyle, CellStyle>: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: Properties
     

@@ -12,46 +12,46 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView! {
         didSet {
-            dataSourceAndDelegate.tableView = tableView
+            dataSource.tableView = tableView
         }
     }
     
-    var dataSourceAndDelegate = DataSourceAndDelegate<SectionInfo, CellInfo>()
+    var dataSource = DataSource<SectionInfo, CellInfo>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupDataSourceAndDelegate()
+        setupDataSource()
         refreshData()
     }
     
-    func setupDataSourceAndDelegate() {
+    func setupDataSource() {
 
-        dataSourceAndDelegate.reuseIdentifierForCellInfo = {
-            cellInfo in
+        dataSource.reuseIdentifierForCellStyle = {
+            cellStyle in
             return "cell"
         }
         
-        dataSourceAndDelegate.configureCellForCellInfo = {
-            cell, cellInfo in
-            cell.textLabel?.text = cellInfo.rawValue
+        dataSource.configureCellForCellStyle = {
+            cell, cellStyle in
+            cell.textLabel?.text = cellStyle.rawValue
         }
         
-        dataSourceAndDelegate.titleForSectionInfo = {
+        dataSource.titleForSectionStyle = {
             sectionInfo in
             return sectionInfo.rawValue
         }
         
-        dataSourceAndDelegate.didSelectCellInfo = {
-            cellInfo in
-            print("did Select: \(cellInfo.rawValue)")
+        dataSource.didSelectCellStyle = {
+            cellStyle in
+            print("did Select: \(cellStyle.rawValue)")
         }
     }
     
     func refreshData() {
-        dataSourceAndDelegate.sections = [
-            Section(sectionInfo: .OverView, cellInfos: [.Name, .Detail, .Time]),
-            Section(sectionInfo: .Author,   cellInfos: [.AuthorName, .AuthorImage, .AuthorAge]),
-            Section(sectionInfo: .Footer,   cellInfos: [.LikeNumber, .FollowNumer, .Time]),
+        dataSource.sections = [
+            Section(sectionStyle: .OverView, cellStyles: [.Name, .Detail, .Time]),
+            Section(sectionStyle: .Author,   cellStyles: [.AuthorName, .AuthorImage, .AuthorAge]),
+            Section(sectionStyle: .Footer,   cellStyles: [.LikeNumber, .FollowNumer, .Time]),
         ]
     }
     

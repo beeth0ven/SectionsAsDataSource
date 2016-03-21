@@ -15,7 +15,7 @@
 		451051D01C39F9EB00404CFF /* SectionsAsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451051CE1C39F9EB00404CFF /* SectionsAsDataSource.swift */; };
 		4589BE7C1C758D0A00A5CE9B /* ModelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4589BE7B1C758D0A00A5CE9B /* ModelTableViewCell.swift */; };
 		45A9858C1C4A4695007DA0CF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A9858B1C4A4695007DA0CF /* ViewController.swift */; };
-		45AD27441C5B106F005C4271 /* DataSourceAndDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AD27431C5B106F005C4271 /* DataSourceAndDelegate.swift */; };
+		45AD27441C5B106F005C4271 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AD27431C5B106F005C4271 /* DataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,7 +29,7 @@
 		451051CE1C39F9EB00404CFF /* SectionsAsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionsAsDataSource.swift; sourceTree = "<group>"; };
 		4589BE7B1C758D0A00A5CE9B /* ModelTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTableViewCell.swift; sourceTree = "<group>"; };
 		45A9858B1C4A4695007DA0CF /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		45AD27431C5B106F005C4271 /* DataSourceAndDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceAndDelegate.swift; sourceTree = "<group>"; };
+		45AD27431C5B106F005C4271 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +65,7 @@
 				451051BA1C39F9C300404CFF /* AppDelegate.swift */,
 				451051BE1C39F9C300404CFF /* Main.storyboard */,
 				45A9858B1C4A4695007DA0CF /* ViewController.swift */,
-				45AD27431C5B106F005C4271 /* DataSourceAndDelegate.swift */,
+				45AD27431C5B106F005C4271 /* DataSource.swift */,
 				4589BE7B1C758D0A00A5CE9B /* ModelTableViewCell.swift */,
 				451051CC1C39F9E100404CFF /* Supporting Files */,
 			);
@@ -157,7 +157,7 @@
 			files = (
 				451051BB1C39F9C300404CFF /* AppDelegate.swift in Sources */,
 				4589BE7C1C758D0A00A5CE9B /* ModelTableViewCell.swift in Sources */,
-				45AD27441C5B106F005C4271 /* DataSourceAndDelegate.swift in Sources */,
+				45AD27441C5B106F005C4271 /* DataSource.swift in Sources */,
 				451051D01C39F9EB00404CFF /* SectionsAsDataSource.swift in Sources */,
 				45A9858C1C4A4695007DA0CF /* ViewController.swift in Sources */,
 				451051CF1C39F9EB00404CFF /* TableViewController.swift in Sources */,

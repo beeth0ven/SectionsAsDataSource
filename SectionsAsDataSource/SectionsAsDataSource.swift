@@ -25,7 +25,7 @@ protocol SectionsAsDataSource: class {
 extension SectionsAsDataSource {
     // Map sectionStruct to sections
     func setupSections() {
-        sections = sectionStruct.map { Section(sectionInfo: $0.section, cellInfos: $0.cells) }
+        sections = sectionStruct.map { Section(sectionStyle: $0.section, cellStyles: $0.cells) }
         collectionTypeView.reloadData()
     }
     
@@ -35,7 +35,7 @@ extension SectionsAsDataSource {
     }
     
     func numberOfCellInfosInSection(section: Int) -> Int {
-        return sections[section].cellInfos.count
+        return sections[section].cellStyles.count
     }
     
     func collectionTypeView(collectionTypeView: CollectionTypeView, cellForRowAtIndexPath indexPath: NSIndexPath) -> CollectionTypeView.Cell {

@@ -82,7 +82,7 @@ extension TableViewController {
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].sectionInfo.rawValue
+        return sections[section].sectionStyle.rawValue
     }
 }
 
